@@ -1,49 +1,62 @@
-from numba import jit, njit, prange, vectorize
-import numpy as np
-import mypy
-import re
+
+
+
 from lex_tabel import tabel
 
 
 def preaperer():
-    f = open("../source.txt", "r")
+    f = open("source.txt", "r")
 
     in_pipe = f.read()  # strips of white spaces
 
-    in_pipe = ''.join(in_pipe.split())
+    in_pipe = in_pipe.replace('\n', ' ')
+    in_pipe.split()
     f.close()
 
     return in_pipe
 
 
-def f_state_machine(x, y):
-    list_values, string_to_compare = x.values(), y
-    word = ''
-    comp_sec_check = ''
-    sec_check = []
+def finite_machina(tab, input):
+    check = ''
+    lo_match = []
     final = []
-    for i in string_to_compare:
-        word += i
-        print(word)
+    def l_of_k(tab):
+        list_of_keys = []
+        tab = list(tab.values())
 
-        for dict in list_values:
+        for i in tab:
+            i = i.values()
 
-            for item in dict:
+            for j in i:
+                #print(j)
+                list_of_keys.append(j)
 
-                value_of_item = dict[item]
+        return list_of_keys
 
-                if value_of_item == word:
-                    sec_check.append(item)
-                    word = ''
-                    print('match found')
+    for i in input:
+        print(i)
+        if i == ' ':
+           
+            lo_match.clear()
+            if check in l_of_k(tab):
+                final.append(check)
+                check = ''
+                
 
+        
+        
+        else:
+            check += i
+            if check in l_of_k(tab):
+                lo_match.append(check)
+                 
+        if '.' in check:
+            final.append(check)
+            check = ''            
 
-                else:
+        
+       
 
-                    for i in sec_check:
-                        print(i)
-                    continue
-    print(f' final words: {final} \n sec check: {sec_check}')
-
-
-f_state_machine(tabel, preaperer())
+   
+    return final
+print(finite_machina(tabel, preaperer()))
